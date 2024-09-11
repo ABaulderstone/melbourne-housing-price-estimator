@@ -51,7 +51,7 @@ r2 = r2_evaluator.evaluate(predictions)
 print(f"R2 on test data = {r2}")
 
 
-model.write().overwrite().save("spark_melbourne_house_price_model")
+model.write().overwrite().save("/app/model/spark_melbourne_house_price_model")
 
 
 spark.stop()
