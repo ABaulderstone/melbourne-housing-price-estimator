@@ -4,6 +4,7 @@ from pyspark.ml.regression import LinearRegression
 from pyspark.ml import Pipeline
 from pyspark.ml.evaluation import RegressionEvaluator
 
+
 spark = SparkSession.builder.appName("MelbourneHousePricingPrediction").getOrCreate()
 data = spark.read.csv("melbourne_housing_data.csv", header=True, inferSchema=True)
 
