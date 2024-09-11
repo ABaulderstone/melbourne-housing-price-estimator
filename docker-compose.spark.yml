@@ -5,8 +5,10 @@ services:
       dockerfile: Dockerfile.dev
     image: bitnami/spark:latest
     container_name: spark-container
-    ports:
-      - '4040:4040' # Spark Web UI
     volumes:
-      - ./spark-app:/app # Mount local directory with Spark script
+      - ./spark-model:/app/model
+    ports:
+      - '4040:4040'
     command: spark-submit --master local[*] /app/train_model.py
+volumes:
+  spark-model:

@@ -1,2 +1,3 @@
 /flask-api/model
 /spark-app/model
+/spark-model/*
