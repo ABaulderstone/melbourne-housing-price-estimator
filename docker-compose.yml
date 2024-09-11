@@ -7,7 +7,7 @@ services:
       - '8080:5000'
     volumes:
       - ./flask-api:/app
-      - model-data:/app/model
+      - ./flask-app/model-data:/app/model
     environment:
       - FLASK_ENV=development
       - FLASK_APP=app.py
