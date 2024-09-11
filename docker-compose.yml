@@ -1,0 +1,32 @@
+services:
+  flask-app:
+    build:
+      context: ./python-app
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'
+    volumes:
+      - ./python-app:/app
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=app.py
+    command: flask run --host=0.0.0.0 --reload
+
+  react-app:
+    build:
+      context: ./react-app
+      dockerfile: Dockerfile
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./react-app:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://flask-app:5000
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - flask-app
+
+networks:
+  default:
+    name: app-network
