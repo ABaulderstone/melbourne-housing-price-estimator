@@ -11,4 +11,6 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["python", "app.py"]
+RUN chmod +x /app/docker-entrypoint.sh
+
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
