@@ -54,14 +54,14 @@ def train_and_save_model():
  
     y_pred = pipeline.predict(X_test)
 
-    # Evaluate the model
+    
     mse = mean_squared_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
 
     print(f"Mean squared error: {mse}")
     print(f"R2 score: {r2}")
 
-    # Save the model
+   
     joblib.dump(pipeline, './model/model.joblib')
 
     print("Model trained and saved successfully.")
