@@ -10,26 +10,22 @@ from sklearn.metrics import mean_squared_error, r2_score
 import joblib
 
 def train_and_save_model():
-    # Load the data
     data = pd.read_csv('./melbourne_housing_data.csv')
+    data = data.dropna(subset=['Price'])  
     
-    # Clean the data
-    data = data.dropna(subset=['Price'])  # Remove rows where Price is NaN
-    
-    # Select features
+
     features = ['Suburb', 'Rooms', 'Bathroom']
     X = data[features]
     y = data['Price']
 
-    # Remove rows with NaN in feature columns
+  
     mask = X.notna().all(axis=1)
     X = X[mask]
     y = y[mask]
 
-    # Split the data
+  
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Create preprocessing steps for numeric and categorical data
     numeric_features = ['Rooms', 'Bathroom']
     categorical_features = ['Suburb']
 
@@ -43,21 +39,19 @@ def train_and_save_model():
         ('onehot', OneHotEncoder(handle_unknown='ignore'))
     ])
 
-    # Combine preprocessing steps
     preprocessor = ColumnTransformer(
         transformers=[
             ('num', numeric_transformer, numeric_features),
             ('cat', categorical_transformer, categorical_features)
         ])
 
-    # Create a pipeline with the preprocessor and the model
     pipeline = Pipeline(steps=[('preprocessor', preprocessor),
                                ('regressor', LinearRegression())])
 
-    # Fit the pipeline
+ 
     pipeline.fit(X_train, y_train)
 
-    # Make predictions on the test set
+ 
     y_pred = pipeline.predict(X_test)
 
     # Evaluate the model
@@ -72,11 +66,6 @@ def train_and_save_model():
 
     print("Model trained and saved successfully.")
 
-    # Print some data statistics
-    print("\nData statistics:")
-    print(f"Total samples: {len(data)}")
-    print(f"Samples after cleaning: {len(X)}")
-    print(f"Features used: {features}")
 
 if __name__ == "__main__":
     train_and_save_model()
