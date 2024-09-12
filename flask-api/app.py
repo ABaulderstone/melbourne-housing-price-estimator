@@ -7,10 +7,12 @@ from pyspark.sql.types import StructType, StructField, StringType, IntegerType, 
 app = Flask(__name__)
 CORS(app)
 
-spark = SparkSession.builder.appName("MelbourneHousePricingAPI").getOrCreate()
+print("Hello")
+
+spark = SparkSession.builder.master("spark://spark-master:7077").appName("MelbourneHousePricingAPI").getOrCreate()
 
 loaded_model = PipelineModel.load("/app/model/spark_melbourne_house_price_model")
-
+print("world")
 schema = StructType([
     StructField("Suburb", StringType(), True),
     StructField("Rooms", IntegerType(), True),
@@ -40,4 +42,5 @@ def predict():
     return jsonify({'predicted_price': predicted_price})
 
 if __name__ == '__main__':
+    print("App running")
     app.run(host='0.0.0.0', port=5000)

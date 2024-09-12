@@ -77,8 +77,7 @@ model = pipeline.fit(train_data)
 predictions = model.transform(test_data)
 
 
-predictions_filtered = predictions.na.drop(subset=["prediction"])
-predictions_filtered = predictions_filtered.withColumn("Price", col("Price").cast("double"))
+
 # debug_stage(predictions_filtered, "predictions")
 
 
@@ -86,7 +85,7 @@ predictions_filtered = predictions_filtered.withColumn("Price", col("Price").cas
 
 
 evaluator = RegressionEvaluator(labelCol="Price", predictionCol="prediction", metricName="rmse")
-rmse = evaluator.evaluate(predictions_filtered)
+rmse = evaluator.evaluate(predictions)
 print(f"Root Mean Squared Error (RMSE) on test data = {rmse}")
 
 r2_evaluator = RegressionEvaluator(labelCol="Price", predictionCol="prediction", metricName="r2")

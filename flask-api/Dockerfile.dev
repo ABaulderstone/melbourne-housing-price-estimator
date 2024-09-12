@@ -1,17 +1,19 @@
 
-FROM python:3-slim
+FROM bitnami/spark:3.4.1
+
+USER root
+RUN apt-get update && apt-get install -y python3-pip python3-dev
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY . /app
 
-RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE 5000
 
-COPY . .
 
-EXPOSE 8080
+CMD ["flask", "run", "--host=0.0.0.0"]
 
-RUN chmod +x /app/docker-entrypoint.sh
-RUN ls -al
-
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
