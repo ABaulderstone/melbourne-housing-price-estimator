@@ -1,39 +1,24 @@
 import { useEffect, useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 import './App.css';
+import { getAllSuburbs, getPrediction } from './services/prediction-service';
+import HouseDataForm from './components/HouseDataForm/HouseDataForm';
+import { HouseFormData } from './components/HouseDataForm/schema';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [suburbs, setSuburbs] = useState<string[]>([]);
+  const [predictedPrice, setPredictedPrice] = useState<string>('');
   useEffect(() => {
-    const BASE = import.meta.env.VITE_API_URL;
-    fetch(BASE)
-      .then((res) => res.text())
-      .then((resp) => console.log(resp));
+    getAllSuburbs().then((res) => setSuburbs(res.suburbs));
   }, []);
 
+  const onSubmit = async (data: HouseFormData) => {
+    const { predicted_price } = await getPrediction(data);
+    setPredictedPrice(predicted_price.toFixed(0));
+  };
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <HouseDataForm suburbs={suburbs} onSubmit={onSubmit} />
+      {predictedPrice && <h4>Estimated Price: ${predictedPrice}</h4>}
     </>
   );
 }
